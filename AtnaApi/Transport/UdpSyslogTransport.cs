@@ -42,6 +42,9 @@ namespace AtnaApi.Transport
         // Represents the remote endpoint that is being connected
         private IPEndPoint m_remoteEndpoint;
 
+        // Represents the local bind port
+        private IPEndPoint m_bind;
+
         // Represents the syslog facility to use 
         public const int SYSLOG_FACILITY = 10;
 
@@ -61,12 +64,32 @@ namespace AtnaApi.Transport
         }
 
         /// <summary>
+        /// Creates a new instance of the ATNA client
+        /// </summary>
+        public UdpSyslogTransport(IPEndPoint endpoint, IPEndPoint bind)
+        {
+            this.m_remoteEndpoint = endpoint;
+            this.m_bind = bind;
+        }
+
+        /// <summary>
         /// Creates a new instance of the Syslog transport
         /// </summary>
         public UdpSyslogTransport(DnsEndPoint endpoint)
         {
             this.SetEndpointDns(endpoint);
         }
+
+        /// <summary>
+        /// Creates a new instance of the Syslog transport
+        /// </summary>
+        public UdpSyslogTransport(DnsEndPoint endpoint, IPEndPoint bind)
+        {
+            this.SetEndpointDns(endpoint);
+            this.m_bind = bind;
+
+        }
+
         /// <summary>
         /// Set the endpoint as a dns entry
         /// </summary>
@@ -77,6 +100,23 @@ namespace AtnaApi.Transport
             if (addresses.AddressList.Count() == 0)
                 throw new InvalidOperationException("Cannot create a syslog transport as the hostname doesn't resolve to an IP Address");
             this.m_remoteEndpoint = new IPEndPoint(addresses.AddressList.First(), endpoint.Port);
+        }
+
+        /// <summary>
+        /// Create the endpoint
+        /// </summary>
+        public String Bind
+        {
+            get { return m_bind?.ToString(); }
+            set
+            {
+                string[] part = value.Split(':');
+                IPAddress ipAdd = null;
+                if (IPAddress.TryParse(part[0], out ipAdd))
+                    this.m_bind = new IPEndPoint(ipAdd, Int32.Parse(part[1]));
+                else
+                    throw new ArgumentException("Local bind must be an IP address");
+            }
         }
 
         /// <summary>
@@ -101,7 +141,12 @@ namespace AtnaApi.Transport
         /// </summary>
         public void SendMessage(AuditMessage am)
         {
-            UdpClient udpClient = new UdpClient();
+            UdpClient udpClient = null;
+            if (this.m_bind != null)
+                udpClient = new UdpClient(this.m_bind);
+            else
+                udpClient = new UdpClient();
+
             try
             {
                 udpClient.Connect(this.m_remoteEndpoint);
