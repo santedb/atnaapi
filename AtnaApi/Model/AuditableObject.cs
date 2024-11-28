@@ -36,12 +36,6 @@ namespace AtnaApi.Model
 		}
 
 		/// <summary>
-		/// Identifies the type of identifier supplied
-		/// </summary>
-		[XmlElement("ParticipantObjectIDTypeCode")]
-		public CodeValue<AuditableObjectIdType> IDTypeCode { get; set; }
-
-		/// <summary>
 		/// Identifies where in the lifecycle of the object this object is currently within
 		/// </summary>
 		[XmlAttribute("ParticipantObjectDataLifeCycle")]
@@ -50,30 +44,36 @@ namespace AtnaApi.Model
 		[XmlIgnore]
 		public bool LifecycleTypeSpecified { get; set; }
 
-		/// <summary>
-		/// Identifies the additional detail for the object
-		/// </summary>
-		[XmlElement("ParticipantObjectDetail")]
-		public List<ObjectDetailType> ObjectDetail { get; set; }
-
-		/// <summary>
+        /// <summary>
 		/// Identifies the object in the event
 		/// </summary>
 		[XmlAttribute("ParticipantObjectID")]
 		public string ObjectId { get; set; }
 
-		/// <summary>
-		/// Participant object query
-		/// </summary>
-		[XmlElement("ParticipantObjectQuery")]
+        /// <summary>
+        /// Identifies the type of identifier supplied
+        /// </summary>
+        [XmlElement("ParticipantObjectIDTypeCode")]
+        public CodeValue<AuditableObjectIdType> IDTypeCode { get; set; }
+
+        /// <summary>
+        /// Participant object query
+        /// </summary>
+        [XmlElement("ParticipantObjectQuery")]
 		[XmlElement("ParticipantObjectName")]
 		[XmlChoiceIdentifier("ObjectSpecChoice")]
 		public string ObjectSpec { get; set; }
 
-		/// <summary>
-		/// Gets or sets the audit choice
-		/// </summary>
-		[XmlIgnore]
+        /// <summary>
+        /// Identifies the additional detail for the object
+        /// </summary>
+        [XmlElement("ParticipantObjectDetail")]
+        public List<ObjectDetailType> ObjectDetail { get; set; }
+
+        /// <summary>
+        /// Gets or sets the audit choice
+        /// </summary>
+        [XmlIgnore]
 		public ObjectDataChoiceType ObjectSpecChoice { get; set; }
 
 		/// <summary>
