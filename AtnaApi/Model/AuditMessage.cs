@@ -72,28 +72,28 @@ namespace AtnaApi.Model
 			this.EventIdentification.EventType.Add(eventTypeCode);
 		}
 
-		/// <summary>
-		/// Represents the actors within the audit event
-		/// </summary>
-		[XmlElement("ActiveParticipant")]
+        /// <summary>
+        /// Represents the type of event
+        /// </summary>
+        [XmlElement("EventIdentification", Order = 0)]
+        public EventIdentificationType EventIdentification { get; set; }
+
+        /// <summary>
+        /// Represents the actors within the audit event
+        /// </summary>
+        [XmlElement("ActiveParticipant", Order = 100)]
 		public List<AuditActorData> Actors { get; set; }
 
-		/// <summary>
-		/// Represents other objects of interest
-		/// </summary>
-		[XmlElement("ParticipantObjectIdentification")]
+        /// <summary>
+        /// Identifies the source of the audit
+        /// </summary>
+        [XmlElement("AuditSourceIdentification", Order = 200)]
+        public List<AuditSourceIdentificationType> SourceIdentification { get; set; }
+
+        /// <summary>
+        /// Represents other objects of interest
+        /// </summary>
+        [XmlElement("ParticipantObjectIdentification", Order = 300)]
 		public List<AuditableObject> AuditableObjects { get; set; }
-
-		/// <summary>
-		/// Represents the type of event
-		/// </summary>
-		[XmlElement("EventIdentification")]
-		public EventIdentificationType EventIdentification { get; set; }
-
-		/// <summary>
-		/// Identifies the source of the audit
-		/// </summary>
-		[XmlElement("AuditSourceIdentification")]
-		public List<AuditSourceIdentificationType> SourceIdentification { get; set; }
 	}
 }
